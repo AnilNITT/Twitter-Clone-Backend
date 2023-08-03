@@ -112,6 +112,13 @@ exports.updateTweet = async (req, res) => {
 
     const { tweetId, content } = req.body;
 
+    if (tweetId === undefined || tweetId === "") {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: false,
+        message: "Tweet id is required",
+      });
+    }
+
     const tweet = await Tweet.findById(tweetId);
 
     if (!tweet) {
@@ -158,6 +165,13 @@ exports.deleteTweet = async (req, res) => {
 
     const { tweetId } = req.body;
 
+    if (tweetId === undefined || tweetId === "") {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: false,
+        message: "Tweet id is required",
+      });
+    }
+    
     const tweet = await Tweet.findById(tweetId);
 
     if (!tweet) {
@@ -234,7 +248,8 @@ exports.GetAllTweet = async (req, res) => {
         status: true,
         message: "Successfull",
         data: tweet,
-      });
+    });
+    
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       status: false,
