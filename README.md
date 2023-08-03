@@ -1,6 +1,6 @@
 # Project Title
 
-Twitter Clone
+## Twitter Clone
 
 ---
 ## Requirements
