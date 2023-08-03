@@ -3,7 +3,6 @@ const { StatusCodes } = require("http-status-codes");
 const Encrypt = require("../../helper/encrypt");
 const { generateUserToken } = require("../../middleware/Auth");
 
-
 // User Registration
 exports.Register = async (req, res) => {
   try {
@@ -103,6 +102,7 @@ exports.Login = async (req, res) => {
 };
 
 
+// User logout
 exports.Logout = async (req, res) => {
   try {
     res
@@ -122,3 +122,103 @@ exports.Logout = async (req, res) => {
   }
 };
 
+
+// Follow User
+exports.Following = async (req, res) => {
+  try {
+    // get user details from verified token
+    const user = req.user;
+
+    const { followId } = req.body;
+
+    // Can't Follow urself
+    if (user.user_id == followId) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: false,
+        message: "U can not Follow urself",
+      });
+      return;
+    }
+
+    const userData = await User.findById(user.user_id);
+    const followuserData = await User.findById(followId);
+
+    if (!userData.following.includes(followId)) {
+      userData.following.push(followId);
+      followuserData.followers.push(userData._id);
+
+      await userData.save();
+      await followuserData.save();
+      
+      return res.status(StatusCodes.OK).json({
+        status: true,
+        message: "Following Successfully",
+        data: userData,
+    });
+    } else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: false,
+        message: "You Already follow this user",
+      });
+      return;
+    }
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: false,
+      message: "Something went wrong",
+      error: err.message,
+    });
+    return;
+  }
+};
+
+
+// Unfollow User
+exports.UnFollowing = async (req, res) => {
+  try {
+    // get user details from verified token
+    const user = req.user;
+
+    const { unfollowId } = req.body;
+
+    // get login user data
+    const userData = await User.findById(user.user_id);
+    // get unfollowing user data
+    const followuserData = await User.findById(unfollowId);
+
+    if (userData.following.includes(unfollowId)) {
+
+      // remove user from following n followers list
+      userData.following.splice([userData.following.indexOf(unfollowId)],1)
+      followuserData.followers.splice([followuserData.followers.indexOf(user.user_id)],1)
+      
+      // save user after updating list
+      await userData.save();
+      await followuserData.save();
+
+      return res.status(StatusCodes.OK).json({
+        status: true,
+        message: "Unfollowing Successfully",
+      });
+    } 
+    else {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        status: false,
+        message: "User is not in your following list",
+      });
+      return;
+    }
+
+    return res.status(StatusCodes.OK).json({
+      status: true,
+      message: "Following Successfully",
+    });
+  } catch (err) {
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+      status: false,
+      message: "Something went wrong",
+      error: err.message,
+    });
+    return;
+  }
+};

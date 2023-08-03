@@ -6,6 +6,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const Database = require("./config/database")
 const user = require("./routes/userRoute");
+const tweet = require("./routes/tweetRoute");
 
 // database Connection
 Database();
@@ -45,7 +46,7 @@ app.get("/", async(req, res)=> {
 
 // User router
 app.use("/user", user);
-// app.use("/tweet", tweet);
+app.use("/tweet", tweet);
 
 
 // Define the port from helper file

@@ -20,6 +20,7 @@ exports.generateUserToken = (id, email) => {
 
 
 exports.authenticateToken = (req, res, next) => {
+  
   const token = req.headers["authorization"];
 
   if (token == null || token === "") {
@@ -43,7 +44,7 @@ exports.authenticateToken = (req, res, next) => {
   } catch (err) {
     return res.status(401).send({
       status: false,
-      error: err,
+      error: err.message,
     });
   }
 };
