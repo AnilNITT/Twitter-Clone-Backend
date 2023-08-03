@@ -11,7 +11,7 @@
 ---
 ### API documentation of Twitter Backend Clone
 <a href="https://masterofreact.postman.co/workspace/Anil-Patidar~f75244cb-18bb-4927-b3ae-4f883af6f237/documentation/18292882-299dac6a-07f6-40db-81df-214e24b56833" rel="nofollow" target="blank">
-<img src="https://raw.githubusercontent.com/pallavi-shekhar/twitter-clone-backend/main/assets/button-view-api-docs.png" />
+<img src="https://raw.githubusercontent.com/pallavi-shekhar/twitter-clone-backend/main/assets/button-view-api-docs.png" width="200"  height="60" style="max-width:100%"/>
 </a>
 
 ---
