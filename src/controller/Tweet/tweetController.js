@@ -9,8 +9,10 @@ exports.addTweet = async (req, res) => {
     // get user details from verified token
     const user = req.user;
 
+    // take tweet content from User
     const { content } = req.body;
 
+    // verify valid input data
     if (content === undefined || content === "") {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
@@ -47,12 +49,14 @@ exports.GetUserTweet = async (req, res) => {
     // get user details from verified token
     const user = req.user;
 
+    // match all tweets of login user Id
     const tweet = await Tweet.aggregate([
       {
         $match: { author: new ObjectId(user.user_id) },
       },
     ]);
 
+    // if We will not found any tweets
     if (tweet.length == 0) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
@@ -78,10 +82,13 @@ exports.GetUserTweet = async (req, res) => {
 // Get Single Tweet
 exports.GetSingleTweet = async (req, res) => {
   try {
+    // get tweetId from API url Params
     const id = req.params.tweetId;
 
+    // find tweet
     const tweet = await Tweet.findById(id);
 
+    // if no tweet data found
     if (!tweet) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
@@ -110,8 +117,10 @@ exports.updateTweet = async (req, res) => {
     // get user details from verified token
     const user = req.user;
 
+    // take update tweet content and tweetID from User
     const { tweetId, content } = req.body;
 
+    // verify valid input data
     if (tweetId === undefined || tweetId === "") {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
@@ -119,8 +128,10 @@ exports.updateTweet = async (req, res) => {
       });
     }
 
+    // find tweet to update
     const tweet = await Tweet.findById(tweetId);
 
+    // if no tweet match with tweetId
     if (!tweet) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
@@ -136,6 +147,7 @@ exports.updateTweet = async (req, res) => {
       });
     }
 
+    // update the tweet content
     const data = await Tweet.findByIdAndUpdate(
       { _id: tweetId },
       { content: content },
@@ -163,17 +175,21 @@ exports.deleteTweet = async (req, res) => {
     // get user details from verified token
     const user = req.user;
 
+    // take tweetID from User to delete
     const { tweetId } = req.body;
 
+    // verify valid input data
     if (tweetId === undefined || tweetId === "") {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
         message: "Tweet id is required",
       });
     }
-    
+
+    // find tweet to delete
     const tweet = await Tweet.findById(tweetId);
 
+    // if no tweet match with tweetId
     if (!tweet) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         status: false,
@@ -213,16 +229,17 @@ exports.GetAllTweet = async (req, res) => {
     const user = req.user;
 
     // get user following list
-    const userData = await User.findById(user.user_id)
+    const userData = await User.findById(user.user_id);
 
+    // match Login user tweets and Following user tweets and sort by latest first
     const tweet = await Tweet.aggregate([
       {
         $match: {
-        $or: [
-          { author: { $in: userData.following } },
-          { author: new ObjectId(user.user_id) },
-        ]
-      }
+          $or: [
+            { author: { $in: userData.following } },
+            { author: new ObjectId(user.user_id) },
+          ],
+        },
       },
       {
         $lookup: {
@@ -239,17 +256,15 @@ exports.GetAllTweet = async (req, res) => {
           createdAt: 1,
           "Author.name": 1,
           "Author.email": 1,
-          
         },
       },
-    ]).sort({createdAt: -1})
+    ]).sort({ createdAt: -1 });
 
     return res.status(StatusCodes.OK).json({
-        status: true,
-        message: "Successfull",
-        data: tweet,
+      status: true,
+      message: "Successfull",
+      data: tweet,
     });
-    
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       status: false,
