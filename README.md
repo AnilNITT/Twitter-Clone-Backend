@@ -44,22 +44,15 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 ## Install
 
-    $ git clone https://github.com/YOUR_USERNAME/PROJECT_TITLE
+    $ git clone https://github.com/AnilNITT/Twitter-Clone-Backend.git
     $ cd PROJECT_TITLE
-    $ yarn install
+    $ npm install
 
-## Configure app
-
-Open `a/nice/path/to/a.file` then edit it with your settings. You will need:
-
-- A setting;
-- Another setting;
-- One more setting;
-
+---
 ## Running the project
 
-    $ yarn start
+    $ npm start
 
 ## Simple build for production
 
-    $ yarn build
+    $ npm build
