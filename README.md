@@ -1,6 +1,5 @@
 # Project Title
-
-## Twitter Clone
+<h1>Twitter Clone</h1>
 
 ---
 ## Requirements
