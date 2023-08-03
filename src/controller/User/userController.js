@@ -1,4 +1,4 @@
-const User = require("../../models/User");
+const User = require("../../models/User/User");
 const { StatusCodes } = require("http-status-codes");
 const Encrypt = require("../../helper/encrypt");
 const { generateUserToken } = require("../../middleware/Auth");
@@ -198,6 +198,7 @@ exports.UnFollowing = async (req, res) => {
 
     // get login user data
     const userData = await User.findById(user.user_id);
+
     // get unfollowing user data
     const followuserData = await User.findById(unfollowId);
 
@@ -226,11 +227,6 @@ exports.UnFollowing = async (req, res) => {
       });
       return;
     }
-
-    return res.status(StatusCodes.OK).json({
-      status: true,
-      message: "Following Successfully",
-    });
   } catch (err) {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
       status: false,

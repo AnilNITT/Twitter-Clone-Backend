@@ -1,7 +1,7 @@
-const Tweet = require("../../models/Tweet");
+const Tweet = require("../../models/Tweet/Tweet");
 const { StatusCodes } = require("http-status-codes");
 const ObjectId = require("mongoose").Types.ObjectId;
-const User = require("../../models/User");
+const User = require("../../models/User/User");
 
 // Add Tweet
 exports.addTweet = async (req, res) => {
