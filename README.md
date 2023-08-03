@@ -1,6 +1,11 @@
 # Project Title
 ## Twitter Clone
 
+### Twitter Clone Features
+- #### Login/SignUp using email and password
+- #### Create, read, update, delete tweets.
+- #### Follow/Unfollow a user
+
 ---
 ## Requirements
 
